@@ -22,5 +22,5 @@ jobs:
     - name: Upload artifacts
         uses: actions/upload-artifact@master
         with:
-          name: npm-artifacts
-          path: publish
+          name: android-artifacts
+          path: app/build/outputs/apk/debug/app-debug.apk
