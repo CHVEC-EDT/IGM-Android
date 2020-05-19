@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="N/A 车位"
+                android:text="N/A"
                 android:textColor="#0C75EB"
                 android:textSize="24sp"
                 android:textStyle="bold"

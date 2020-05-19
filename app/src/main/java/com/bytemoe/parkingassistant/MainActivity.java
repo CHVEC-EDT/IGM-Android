@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 import com.xuhao.didi.core.iocore.interfaces.ISendable;
 import com.xuhao.didi.core.pojo.OriginalData;
 import com.xuhao.didi.core.protocol.IReaderProtocol;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.socket.client.sdk.OkSocket;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
@@ -24,12 +28,11 @@ import com.xuhao.didi.socket.client.sdk.client.connection.IConnectionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,21 +40,22 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     private Handler handler;
+    private Moshi moshi = new Moshi.Builder().build();
+    private JsonAdapter<GarageBean> garageBeanJsonAdapter = moshi.adapter(GarageBean.class);
 
-    //    public String HOST = "192.168.0.106";
-    public String HOST = "10.1.1.4";
-    public int PORT = 8080;
-
-    private List<Garage> garageList = new ArrayList<>();
+    public String HOST = "192.168.1.2";
+    public int PORT = 8098;
 
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_main);
 
-//        SLog.setIsDebug(true);
-//        OkSocketOptions.setIsDebug(true);
+        SLog.setIsDebug(true);
+        OkSocketOptions.setIsDebug(true);
 
         ConnectionInfo connectionInfo = new ConnectionInfo(HOST, PORT);
         final IConnectionManager connectionManager = OkSocket.open(connectionInfo);
@@ -74,16 +78,27 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSocketReadResponse(final ConnectionInfo info, final String action, final OriginalData data) {
+//                Log.e("IGM", Arrays.toString(data.getBodyBytes()));
+                Log.e("IGM", Arrays.toString(data.getHeadBytes()));
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, Arrays.toString(data.getBodyBytes()), Toast.LENGTH_SHORT).show();
-                        connectionManager.send(new ISendable() {
-                            @Override
-                            public byte[] parse() {
-                                return data.getBodyBytes();
-                            }
-                        });
+                        String dataStr = new String(data.getBodyBytes());
+                        Log.e("IGM", dataStr);
+                        GarageBean garageBean = null;
+                        try {
+                            garageBean = garageBeanJsonAdapter.fromJson(dataStr);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        assert garageBean != null;
+                        DataManager.getInstance().getGarageList().clear();
+                        for (GarageBean.Data.Garage garage : garageBean.data.garages) {
+                            DataManager.getInstance().getGarageList().add(
+                                    new Garage(new String(garage.name.getBytes()), garage.distance, garage.total, garage.remaining, garage.parkId)
+                            );
+                            ((GarageAdapter) Objects.requireNonNull(DataManager.getInstance().getStore().get("garageAdapter"))).notifyDataSetChanged();
+                        }
                     }
                 });
             }
@@ -100,8 +115,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, GarageDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("name", DataManager.getInstance().getGarageList().get(position).getName());
-                bundle.putInt("distance", DataManager.getInstance().getGarageList().get(position).getDistance());
+                bundle.putInt("position", position);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -109,12 +123,13 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(garageAdapter);
         DataManager.getInstance().getStore().put("garageAdapter", garageAdapter);
 
-        DataManager.getInstance().getGarageList().add(new Garage("花滩大道二号育才职教中心车库", 1, 100, 5));
-        DataManager.getInstance().getGarageList().add(new Garage("丁香郡车库", 3, 300, 62));
-        DataManager.getInstance().getGarageList().add(new Garage("马赛庄园车库", 4, 350, 47));
-        DataManager.getInstance().getGarageList().add(new Garage("东海滨江城车库", 6, 250, 29));
-        DataManager.getInstance().getGarageList().add(new Garage("盒子萌总部", 327, 500, 237));
-        garageList = DataManager.getInstance().getGarageList();
+        String[] data = {"A1001", "A1002", "A1010", "B1009", "B1016", "A1001", "A1002", "A1010", "B1009", "B1016", "A1001", "A1002", "A1010", "B1009", "B1016",};
+
+        DataManager.getInstance().getGarageList().add(new Garage("花滩大道二号育才职教中心车库", 1, 100, 5, data));
+        DataManager.getInstance().getGarageList().add(new Garage("丁香郡车库", 3, 300, 62, data));
+        DataManager.getInstance().getGarageList().add(new Garage("马赛庄园车库", 4, 350, 47, data));
+        DataManager.getInstance().getGarageList().add(new Garage("东海滨江城车库", 6, 250, 29, data));
+        DataManager.getInstance().getGarageList().add(new Garage("盒子萌总部", 327, 500, 237, data));
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -132,20 +147,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        this.garageList = null;
-        this.garageList = DataManager.getInstance().getGarageList();
-        ((GarageAdapter) Objects.requireNonNull(DataManager.getInstance().getStore().get("garageAdapter"))).notifyDataSetChanged();
+//        this.garageList = null;
+//        this.garageList = DataManager.getInstance().getGarageList();
+//        ((GarageAdapter) Objects.requireNonNull(DataManager.getInstance().getStore().get("garageAdapter"))).notifyDataSetChanged();
         Log.e("IGM", "Resume");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DataManager.getInstance().getGarageList().clear();
+    }
+
     public static class m2sPKG implements ISendable {
-        private String str = "";
+        private String message = "";
 
         m2sPKG() {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("cmd", "fetch");
-                str = jsonObject.toString();
+                jsonObject.put("identifier", 0);
+                jsonObject.put("quantity", 0);
+                jsonObject.put("remain", 0);
+                jsonObject.put("beingUsed", 0);
+                jsonObject.put("info", 0);
+                message = jsonObject.toString();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -153,10 +179,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public byte[] parse() {
-            byte[] body = str.getBytes(Charset.defaultCharset());
+            byte[] body = message.getBytes(Charset.defaultCharset());
             ByteBuffer bb = ByteBuffer.allocate(4 + body.length);
             bb.order(ByteOrder.BIG_ENDIAN);
-//            bb.putInt(body.length);
             bb.put(body);
             return bb.array();
         }
