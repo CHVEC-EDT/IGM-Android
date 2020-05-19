@@ -123,13 +123,13 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(garageAdapter);
         DataManager.getInstance().getStore().put("garageAdapter", garageAdapter);
 
-        String[] data = {"A1001", "A1002", "A1010", "B1009", "B1016", "A1001", "A1002", "A1010", "B1009", "B1016", "A1001", "A1002", "A1010", "B1009", "B1016",};
+//        String[] data = {"A1001", "A1002", "A1010", "B1009", "B1016", "A1001", "A1002", "A1010", "B1009", "B1016", "A1001", "A1002", "A1010", "B1009", "B1016",};
+//        DataManager.getInstance().getGarageList().add(new Garage("花滩大道二号育才职教中心车库", 1, 100, 5, data));
+//        DataManager.getInstance().getGarageList().add(new Garage("丁香郡车库", 3, 300, 62, data));
+//        DataManager.getInstance().getGarageList().add(new Garage("马赛庄园车库", 4, 350, 47, data));
+//        DataManager.getInstance().getGarageList().add(new Garage("东海滨江城车库", 6, 250, 29, data));
+//        DataManager.getInstance().getGarageList().add(new Garage("盒子萌总部", 327, 500, 237, data));
 
-        DataManager.getInstance().getGarageList().add(new Garage("花滩大道二号育才职教中心车库", 1, 100, 5, data));
-        DataManager.getInstance().getGarageList().add(new Garage("丁香郡车库", 3, 300, 62, data));
-        DataManager.getInstance().getGarageList().add(new Garage("马赛庄园车库", 4, 350, 47, data));
-        DataManager.getInstance().getGarageList().add(new Garage("东海滨江城车库", 6, 250, 29, data));
-        DataManager.getInstance().getGarageList().add(new Garage("盒子萌总部", 327, 500, 237, data));
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
