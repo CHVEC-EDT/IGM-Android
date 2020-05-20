@@ -23,7 +23,7 @@ jobs:
       uses: zkqiang/tencent-cos-action@v0.1.0
       with:
         # COSCMD args, detail: https://cloud.tencent.com/document/product/436/10976
-        args: upload -r app/release/*.apk igm/release
+        args: upload -r app/release/*.apk igm/release/
         # Tencent cloud SecretId, from: https://console.cloud.tencent.com/cam/capi
         secret_id: ${{ secrets.SECRET_ID }}
         # Tencent cloud SecretKey, from: https://console.cloud.tencent.com/cam/capi
@@ -35,5 +35,4 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@master
       with:
-        name: android-artifacts
-        path: app/release
+        path: app/release/*.apk
