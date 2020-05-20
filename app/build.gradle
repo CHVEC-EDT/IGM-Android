@@ -4,7 +4,7 @@ static def releaseTime() {
     return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }
 
-Process process = "git rev-list --count HEAD".execute()
+Process process = "git rev-list --all --count HEAD".execute()
 process.waitFor()
 int commitCount = process.getText() as int
 
