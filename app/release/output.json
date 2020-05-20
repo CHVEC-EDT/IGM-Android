@@ -1,0 +1,20 @@
+[
+  {
+    "outputType": {
+      "type": "APK"
+    },
+    "apkData": {
+      "type": "MAIN",
+      "splits": [],
+      "versionCode": 9,
+      "versionName": "1.0.5.build-9",
+      "enabled": true,
+      "outputFile": "com.bytemoe.parkingassistant-1.0.5.build-9.20200520.apk",
+      "fullName": "release",
+      "baseName": "release",
+      "dirName": ""
+    },
+    "path": "com.bytemoe.parkingassistant-1.0.5.build-9.20200520.apk",
+    "properties": {}
+  }
+]

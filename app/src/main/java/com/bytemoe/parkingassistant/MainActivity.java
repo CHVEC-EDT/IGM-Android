@@ -40,9 +40,14 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     private Handler handler;
+    //    private Timer timer;
     private Moshi moshi = new Moshi.Builder().build();
     private JsonAdapter<GarageBean> garageBeanJsonAdapter = moshi.adapter(GarageBean.class);
 
+    //    public String HOST = "10.1.1.4";
+    //    public int PORT = 8080;
+    //    public String HOST = "igm-io.cedt.bytemoe.com";
+    //    public int PORT = 8080;
     public String HOST = "192.168.1.2";
     public int PORT = 8098;
 
@@ -54,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_main);
 
-        SLog.setIsDebug(true);
-        OkSocketOptions.setIsDebug(true);
+        SLog.setIsDebug(false);
+        OkSocketOptions.setIsDebug(false);
 
         ConnectionInfo connectionInfo = new ConnectionInfo(HOST, PORT);
         final IConnectionManager connectionManager = OkSocket.open(connectionInfo);
         OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
-
         handler = new Handler();
+
         builder.setReaderProtocol(new IReaderProtocol() {
             @Override
             public int getHeaderLength() {
@@ -75,10 +80,26 @@ public class MainActivity extends AppCompatActivity {
         });
         connectionManager.option(builder.build());
         connectionManager.registerReceiver(new SocketActionAdapter() {
+            @Override
+            public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
+                super.onSocketConnectionSuccess(info, action);
+                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, "连接服务器成功");
+            }
+
+            @Override
+            public void onSocketDisconnection(ConnectionInfo info, String action, final Exception e) {
+                super.onSocketDisconnection(info, action, e);
+                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, "与服务器失去连接", e);
+            }
+
+            @Override
+            public void onSocketConnectionFailed(ConnectionInfo info, String action, final Exception e) {
+                super.onSocketConnectionFailed(info, action, e);
+                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, "连接服务器失败", e);
+            }
 
             @Override
             public void onSocketReadResponse(final ConnectionInfo info, final String action, final OriginalData data) {
-//                Log.e("IGM", Arrays.toString(data.getBodyBytes()));
                 Log.e("IGM", Arrays.toString(data.getHeadBytes()));
                 handler.post(new Runnable() {
                     @Override
@@ -95,15 +116,13 @@ public class MainActivity extends AppCompatActivity {
                         DataManager.getInstance().getGarageList().clear();
                         for (GarageBean.Data.Garage garage : garageBean.data.garages) {
                             DataManager.getInstance().getGarageList().add(
-                                    new Garage(new String(garage.name.getBytes()), garage.distance, garage.total, garage.remaining, garage.parkId)
+                                    new Garage(new String(garage.name.getBytes()), garage.distance / 100, garage.total, garage.remaining, garage.parkId)
                             );
                             ((GarageAdapter) Objects.requireNonNull(DataManager.getInstance().getStore().get("garageAdapter"))).notifyDataSetChanged();
                         }
                     }
                 });
             }
-
-
         });
 
         connectionManager.connect();
@@ -130,27 +149,18 @@ public class MainActivity extends AppCompatActivity {
 //        DataManager.getInstance().getGarageList().add(new Garage("东海滨江城车库", 6, 250, 29, data));
 //        DataManager.getInstance().getGarageList().add(new Garage("盒子萌总部", 327, 500, 237, data));
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (connectionManager.isConnect()) connectionManager.send(new m2sPKG());
-                    }
-                });
-            }
-        }, 0, 5000);
+        DataManager.getInstance().getStore().putIfAbsent("recvTimer", new Timer());
+        Timer timer = (Timer) Objects.requireNonNull(DataManager.getInstance().getStore().get("recvTimer"));
+        DataManager.getInstance().getStore().putIfAbsent("recvTimerRunning", false);
+        if (!(boolean) DataManager.getInstance().getStore().get("recvTimerRunning")) {
+            timer.schedule(new RecvTask(connectionManager), 0, 5000);
+            DataManager.getInstance().getStore().put("recvTimerRunning", true);
+        }
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-//        this.garageList = null;
-//        this.garageList = DataManager.getInstance().getGarageList();
-//        ((GarageAdapter) Objects.requireNonNull(DataManager.getInstance().getStore().get("garageAdapter"))).notifyDataSetChanged();
-        Log.e("IGM", "Resume");
     }
 
     @Override
@@ -158,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         DataManager.getInstance().getGarageList().clear();
     }
+
 
     public static class m2sPKG implements ISendable {
         private String message = "";
@@ -184,6 +195,24 @@ public class MainActivity extends AppCompatActivity {
             bb.order(ByteOrder.BIG_ENDIAN);
             bb.put(body);
             return bb.array();
+        }
+    }
+
+    class RecvTask extends TimerTask {
+        private IConnectionManager connectionManager;
+
+        RecvTask(IConnectionManager connectionManager) {
+            this.connectionManager = connectionManager;
+        }
+
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (connectionManager.isConnect()) connectionManager.send(new m2sPKG());
+                }
+            });
         }
     }
 }

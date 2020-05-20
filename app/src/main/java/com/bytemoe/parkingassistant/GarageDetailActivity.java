@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,6 +22,7 @@ public class GarageDetailActivity extends AppCompatActivity {
     private Context mContext;
     private int position;
     private ArrayAdapter<String> arrayAdapter;
+    private List<String> remainingList = new ArrayList<>();
 
     private ListView listView;
     private TextView tv_remaining, tv_total;
@@ -50,28 +54,31 @@ public class GarageDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1,
-                DataManager.getInstance().getGarageList().get(position).getRemainingList());
+                remainingList);
         listView.setAdapter(arrayAdapter);
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateData();
-                    }
-                });
+                updateData();
             }
         }, 0, 1000);
     }
 
     private void updateData() {
-        tv_remaining.setText(String.valueOf(DataManager.getInstance().getGarageList().get(position).getRemaining()));
-        tv_total.setText(String.valueOf(DataManager.getInstance().getGarageList().get(position).getTotal()));
-        toolbar.setTitle(DataManager.getInstance().getGarageList().get(position).getName());
-        arrayAdapter.notifyDataSetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                toolbar.setTitle(DataManager.getInstance().getGarageList().get(position).getName());
+                tv_remaining.setText(String.valueOf(DataManager.getInstance().getGarageList().get(position).getRemaining()));
+                tv_total.setText(String.valueOf(DataManager.getInstance().getGarageList().get(position).getTotal()));
+                remainingList.clear();
+                remainingList.addAll(Arrays.asList(DataManager.getInstance().getGarageList().get(position).getRemainingList()));
+                arrayAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }
