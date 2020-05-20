@@ -22,12 +22,23 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("parkingassistant.jks")
+            storePassword "111112113"
+            keyAlias "parkingassistant"
+            keyPassword "111112113"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.release
 
             applicationVariants.all { variant ->
                 variant.outputs.all {
