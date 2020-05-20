@@ -18,7 +18,9 @@ jobs:
         with:
           java-version: 1.8
       - name: Build with Gradle
-        run: ./gradlew assembleRelease
+        run: |
+          ./gradlew clean
+          ./gradlew assembleRelease
       - name: Upload to COS
         uses: zkqiang/tencent-cos-action@v0.1.0
         with:
