@@ -26,7 +26,6 @@ jobs:
         secret_id: ${{ secrets.SECRET_ID }}
         secret_key: ${{ secrets.SECRET_KEY }}
         bucket: ${{ secrets.BUCKET }}
-        # COS bucket region, detail: https://cloud.tencent.com/document/product/436/6224
         region: ap-chongqing
     - name: Upload artifacts
       uses: actions/upload-artifact@master
