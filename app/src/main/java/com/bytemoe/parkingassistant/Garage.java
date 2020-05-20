@@ -7,7 +7,7 @@ class Garage {
     private int remaining;
     private String[] remainingList;
 
-    public Garage(String name, int distance, int total, int remaining, String[] remainingList) {
+    Garage(String name, int distance, int total, int remaining, String[] remainingList) {
         this.name = name;
         this.distance = distance;
         this.total = total;
@@ -19,19 +19,19 @@ class Garage {
         return name;
     }
 
-    public int getDistance() {
+    int getDistance() {
         return distance;
     }
 
-    public int getTotal() {
+    int getTotal() {
         return total;
     }
 
-    public int getRemaining() {
+    int getRemaining() {
         return remaining;
     }
 
-    public String[] getRemainingList() {
+    String[] getRemainingList() {
         return remainingList;
     }
 }

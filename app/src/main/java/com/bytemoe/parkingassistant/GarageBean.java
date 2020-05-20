@@ -4,17 +4,17 @@ import java.util.List;
 
 public class GarageBean {
     public String type;
-    public Data data;
+    Data data;
 
-    public static class Data {
-        public List<Garage> garages;
+    static class Data {
+        List<Garage> garages;
 
         public static class Garage {
             public String name;
-            public int total;
-            public int remaining;
-            public int distance;
-            public String[] parkId;
+            int total;
+            int remaining;
+            int distance;
+            String[] parkId;
         }
     }
 }

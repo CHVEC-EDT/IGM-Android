@@ -1,6 +1,5 @@
 package com.bytemoe.parkingassistant;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,12 +18,10 @@ import java.util.TimerTask;
 
 public class GarageDetailActivity extends AppCompatActivity {
 
-    private Context mContext;
     private int position;
     private ArrayAdapter<String> arrayAdapter;
     private List<String> remainingList = new ArrayList<>();
 
-    private ListView listView;
     private TextView tv_remaining, tv_total;
     private MaterialToolbar toolbar;
 
@@ -33,7 +30,6 @@ public class GarageDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garage_detail);
 
-        mContext = this;
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         position = bundle.getInt("position");
@@ -46,7 +42,7 @@ public class GarageDetailActivity extends AppCompatActivity {
         tv_remaining = findViewById(R.id.detail_tv_remaining);
         tv_total = findViewById(R.id.detail_tv_total);
         toolbar = findViewById(R.id.topAppBar);
-        listView = findViewById(R.id.detail_listView);
+        ListView listView = findViewById(R.id.detail_listView);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
