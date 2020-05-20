@@ -19,9 +19,21 @@ jobs:
         java-version: 1.8
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Upload to COS
+      uses: zkqiang/tencent-cos-action@v0.1.0
+      with:
+        # COSCMD args, detail: https://cloud.tencent.com/document/product/436/10976
+        args: upload -r app/release/*.apk /igm/release
+        # Tencent cloud SecretId, from: https://console.cloud.tencent.com/cam/capi
+        secret_id: ${{ secrets.SECRET_ID }}
+        # Tencent cloud SecretKey, from: https://console.cloud.tencent.com/cam/capi
+        secret_key: ${{ secrets.SECRET_KEY }}
+        # COS bucket name
+        bucket: ${{ secrets.BUCKET }}
+        # COS bucket region, detail: https://cloud.tencent.com/document/product/436/6224
+        region: ap-chongqing
     - name: Upload artifacts
       uses: actions/upload-artifact@master
       with:
         name: android-artifacts
         path: app/release
-#        path: app/build/outputs/apk/debug/app-debug.apk
