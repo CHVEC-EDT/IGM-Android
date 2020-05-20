@@ -9,11 +9,10 @@ on:
 jobs:
   build:
 
-    #    runs-on: ubuntu-latest
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout
       - name: set up JDK
         uses: actions/setup-java@v1
         with:
