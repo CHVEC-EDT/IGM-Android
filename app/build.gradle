@@ -17,7 +17,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 29
         versionCode commitCount
-        versionName "1.0.5.build-${commitCount}"
+        versionName "1.0.5.build-${versionCode}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
