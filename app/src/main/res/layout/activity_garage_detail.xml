@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="剩余"
+                    android:text="@string/detail_remaining"
                     android:textColor="#0C75EB" />
             </LinearLayout>
 
@@ -58,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="5"
+                    android:text="N/A"
                     android:textColor="#0C75EB"
                     android:textSize="36sp"
                     android:textStyle="bold" />
@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="总车位"
+                    android:text="@string/detail_space_total"
                     android:textColor="#0C75EB" />
             </LinearLayout>
 

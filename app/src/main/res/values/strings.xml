@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Parking Assistant</string>
+    <string name="detail_remaining">Remaining</string>
+    <string name="detail_space_total">Total</string>
 </resources>

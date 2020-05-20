@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">停车助手</string>
+    <string name="detail_remaining">剩余</string>
+    <string name="detail_space_total">总车位</string>
+</resources>
