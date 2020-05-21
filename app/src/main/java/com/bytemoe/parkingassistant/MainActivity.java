@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
                         new MaterialAlertDialogBuilder(MainActivity.this)
                                 .setTitle("软件更新")
                                 .setMessage("软件有新的版本，请在通知栏查看下载进度")
-                                .setNegativeButton("确定", null)
+//                                .setNegativeButton("确定", null)
+                                .setCancelable(false)
                                 .show();
                         new DownloadUtils(MainActivity.this, (String) msg.obj, filename[filename.length - 1]);
                         break;
