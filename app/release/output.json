@@ -1,0 +1,20 @@
+[
+  {
+    "outputType": {
+      "type": "APK"
+    },
+    "apkData": {
+      "type": "MAIN",
+      "splits": [],
+      "versionCode": 46,
+      "versionName": "1.1.0.build-46",
+      "enabled": true,
+      "outputFile": "com.bytemoe.parkingassistant-1.1.0.build-46.20200521.apk",
+      "fullName": "release",
+      "baseName": "release",
+      "dirName": ""
+    },
+    "path": "com.bytemoe.parkingassistant-1.1.0.build-46.20200521.apk",
+    "properties": {}
+  }
+]
