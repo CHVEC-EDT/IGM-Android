@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.xuhao.didi.core.iocore.interfaces.ISendable;
@@ -67,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (msg.what) {
                     case 0:
                         String[] filename = ((String) msg.obj).split("/");
+                        new MaterialAlertDialogBuilder(MainActivity.this)
+                                .setTitle("软件更新")
+                                .setMessage("软件有新的版本，请在通知栏查看下载进度")
+                                .setNegativeButton("确定", null)
+                                .show();
                         new DownloadUtils(MainActivity.this, (String) msg.obj, filename[filename.length - 1]);
                         break;
                 }
