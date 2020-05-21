@@ -83,12 +83,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
-//        try {
-//            Toast.makeText(this, Utils.checkUpdate(getApplicationContext()), Toast.LENGTH_LONG).show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         new Thread(new Runnable() {
             @Override
             public void run() {
