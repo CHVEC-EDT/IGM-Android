@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -20,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.xuhao.didi.core.iocore.interfaces.ISendable;
@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -91,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String apkUrl = Utils.checkUpdate(getApplicationContext());
                     msg.obj = apkUrl;
-                    Log.e("IGM", String.valueOf(apkUrl));
                     if (apkUrl != null) handler.sendMessage(msg);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -132,12 +130,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSocketReadResponse(final ConnectionInfo info, final String action, final OriginalData data) {
-                Log.e("IGM", Arrays.toString(data.getHeadBytes()));
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
                         String dataStr = new String(data.getBodyBytes());
-                        Log.e("IGM", dataStr);
                         GarageBean garageBean = null;
                         try {
                             garageBean = garageBeanJsonAdapter.fromJson(dataStr);
@@ -226,29 +222,29 @@ public class MainActivity extends AppCompatActivity {
     private void downLoadUpdate(Context context, String url, String filename) {
         try {
             Uri uri = Uri.parse(url);
-            //得到系统的下载管理
             DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-            //得到连接请求对象
             DownloadManager.Request request = new DownloadManager.Request(uri);
-            //指定在什么网络下允许下载
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE);
-            //指定下载文件的保存路径，缓存目录，用手机自带的文件管理器看不到（Android\data\项目包名\files\Download\subPath）
             request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, filename);
             request.setTitle("停车助手");
             request.setDescription("软件更新下载");
-            //MIME_MapTable是所有文件的后缀名所对应的MIME类型的一个String数组  比如{".apk",    "application/vnd.android.package-archive"},
             request.setMimeType("application/vnd.android.package-archive");
-            // 下载完成后该Notification才会被显示
-            // Android 3.0版本 以后才有该方法
-            //在下载过程中通知栏会一直显示该下载的Notification，在下载完成后该Notification会继续显示，直到用户点击该Notification或者消除该Notification
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            //启动下载,该方法返回系统为当前下载请求分配的一个唯一的ID
             assert manager != null;
             long downLoadId = manager.enqueue(request);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle("软件更新")
+                            .setMessage("正在下载新版本安装包，请在通知栏查看进度。")
+                            .setNegativeButton("确定", null)
+                            .show();
+                }
+            });
         } catch (Exception e) {
             Uri uri = Uri.parse(url);
-            //String android.intent.action.VIEW 比较通用，会根据用户的数据类型打开相应的Activity。如:浏览器,电话,播放器,地图
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

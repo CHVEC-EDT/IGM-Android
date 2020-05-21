@@ -83,6 +83,7 @@ class Utils {
         assert versionCheckData != null;
         latestBuild = Integer.parseInt(Objects.requireNonNull(versionCheckData.apkData.versionName.split("-")[1]));
         return latestBuild > currentBuild ? cosBase + versionCheckData.apkData.outputFile : null;
+//        return cosBase + versionCheckData.apkData.outputFile;
     }
 
     static Response httpGet(String url) {
