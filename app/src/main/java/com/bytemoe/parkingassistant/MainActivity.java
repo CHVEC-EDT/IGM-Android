@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case 0:
-                        Toast.makeText(MainActivity.this, (String) msg.obj, Toast.LENGTH_LONG).show();
                         String[] filename = ((String) msg.obj).split("/");
                         downLoadUpdate(getApplicationContext(), (String) msg.obj, filename[filename.length - 1]);
                         break;

@@ -3,7 +3,6 @@ package com.bytemoe.parkingassistant;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -77,13 +76,10 @@ class Utils {
         String responseStr = Objects.requireNonNull(response.body()).string();
         responseStr = responseStr.substring(0, responseStr.length() - 1);
         responseStr = responseStr.replaceFirst("\\[", "");
-        Log.e("HTTP", "Current Build: " + currentBuild);
-        Log.e("HTTP", responseStr);
         VersionCheckBean versionCheckData = versionCheckBeanJsonAdapter.fromJson(responseStr);
         assert versionCheckData != null;
         latestBuild = Integer.parseInt(Objects.requireNonNull(versionCheckData.apkData.versionName.split("-")[1]));
         return latestBuild > currentBuild ? cosBase + versionCheckData.apkData.outputFile : null;
-//        return cosBase + versionCheckData.apkData.outputFile;
     }
 
     static Response httpGet(String url) {
