@@ -75,7 +75,7 @@ class DownloadUtils {
                     cursor.close();
                     break;
                 case DownloadManager.STATUS_FAILED:
-                    Toast.makeText(mContext, "下载失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "下载更新失败", Toast.LENGTH_SHORT).show();
                     cursor.close();
                     mContext.unregisterReceiver(receiver);
                     break;
