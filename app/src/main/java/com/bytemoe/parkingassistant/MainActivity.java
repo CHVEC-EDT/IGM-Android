@@ -4,12 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -62,7 +65,39 @@ public class MainActivity extends AppCompatActivity {
         ConnectionInfo connectionInfo = new ConnectionInfo(HOST, PORT);
         final IConnectionManager connectionManager = OkSocket.open(connectionInfo);
         OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
-        handler = new Handler();
+        handler = new Handler() {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 0:
+                        Toast.makeText(MainActivity.this, (String) msg.obj, Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        };
+
+
+//        try {
+//            Toast.makeText(this, Utils.checkUpdate(getApplicationContext()), Toast.LENGTH_LONG).show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message msg = new Message();
+                msg.what = 0;
+                try {
+                    String apkUrl = Utils.checkUpdate(getApplicationContext());
+                    msg.obj = apkUrl;
+                    Log.e("IGM", String.valueOf(apkUrl));
+                    if (apkUrl != null) handler.sendMessage(msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
         builder.setReaderProtocol(new IReaderProtocol() {
             @Override
