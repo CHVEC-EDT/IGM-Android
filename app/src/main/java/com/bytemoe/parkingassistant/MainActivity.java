@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     public String HOST = "igm-io.cedt.bytemoe.com";
     public int PORT = 8098;
-//    public String HOST = "192.168.1.2";
-//    public int PORT = 8098;
+
+    /* Fake new version */
 
     @SuppressLint("HandlerLeak")
     @Override
