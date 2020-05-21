@@ -19,3 +19,41 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-dontwarn com.xuhao.didi.socket.client.**
+-dontwarn com.xuhao.didi.socket.common.**
+-dontwarn com.xuhao.didi.socket.server.**
+-dontwarn com.xuhao.didi.core.**
+
+-keep class com.xuhao.didi.socket.client.** { *; }
+-keep class com.xuhao.didi.socket.common.** { *; }
+-keep class com.xuhao.didi.socket.server.** { *; }
+-keep class com.xuhao.didi.core.** { *; }
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+-keep class com.xuhao.didi.socket.client.sdk.client.OkSocketOptions$* {
+    *;
+}
+-keep class com.xuhao.didi.socket.server.impl.OkServerOptions$* {
+    *;
+}
+
+-dontwarn rx.**
+
+-dontwarn okio.**
+
+-dontwarn com.squareup.okhttp.**
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+
+-dontwarn retrofit.**
+-dontwarn retrofit.appengine.UrlFetchClient
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+
+-keepattributes Signature
+-keepattributes *Annotation*

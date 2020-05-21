@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     String apkUrl = Utils.checkUpdate(getApplicationContext());
                     msg.obj = apkUrl;
                     if (apkUrl != null) handler.sendMessage(msg);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
