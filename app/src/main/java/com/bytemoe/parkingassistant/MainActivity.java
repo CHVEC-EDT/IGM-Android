@@ -1,12 +1,8 @@
 package com.bytemoe.parkingassistant;
 
 import android.annotation.SuppressLint;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -18,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.xuhao.didi.core.iocore.interfaces.ISendable;
@@ -72,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (msg.what) {
                     case 0:
                         String[] filename = ((String) msg.obj).split("/");
-                        downLoadUpdate(getApplicationContext(), (String) msg.obj, filename[filename.length - 1]);
+                        new DownloadUtils(MainActivity.this, (String) msg.obj, filename[filename.length - 1]);
                         break;
                 }
             }
@@ -212,38 +207,6 @@ public class MainActivity extends AppCompatActivity {
             bb.order(ByteOrder.BIG_ENDIAN);
             bb.put(body);
             return bb.array();
-        }
-    }
-
-    private void downLoadUpdate(Context context, String url, String filename) {
-        try {
-            Uri uri = Uri.parse(url);
-            DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-            DownloadManager.Request request = new DownloadManager.Request(uri);
-            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
-            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE);
-            request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, filename);
-            request.setTitle("停车助手");
-            request.setDescription("软件更新下载");
-            request.setMimeType("application/vnd.android.package-archive");
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            assert manager != null;
-            long downLoadId = manager.enqueue(request);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    new MaterialAlertDialogBuilder(MainActivity.this)
-                            .setTitle("软件更新")
-                            .setMessage("正在下载新版本安装包，请在通知栏查看进度。")
-                            .setNegativeButton("确定", null)
-                            .show();
-                }
-            });
-        } catch (Exception e) {
-            Uri uri = Uri.parse(url);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
         }
     }
 
