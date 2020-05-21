@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private JsonAdapter<GarageBean> garageBeanJsonAdapter = moshi.adapter(GarageBean.class);
 
     public String HOST = "igm-io.cedt.bytemoe.com";
-    public int PORT = 8098;
+    public int PORT = 32323;
 
     @SuppressLint("HandlerLeak")
     @Override
