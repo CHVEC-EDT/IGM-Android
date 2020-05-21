@@ -21,32 +21,32 @@ jobs:
         run: |
           ./gradlew clean
           ./gradlew assembleRelease
-      #      - name: Upload to COS
-      #        uses: zkqiang/tencent-cos-action@v0.1.0
+      - name: Upload to COS
+        uses: zkqiang/tencent-cos-action@v0.1.0
+        with:
+          args: upload -r app/build/outputs/apk/release/ igm/release/android/ && upload -r app/build/outputs/apk/release/*.apk igm/release/android/com.bytemoe.parkingassistant-latest.apk
+          secret_id: ${{ secrets.SECRET_ID }}
+          secret_key: ${{ secrets.SECRET_KEY }}
+          bucket: ${{ secrets.BUCKET }}
+          region: ap-chongqing
+      #      - name: Upload artifacts to COS
+      #        uses: TencentCloud/cos-action@v1
       #        with:
-      #          args: upload -r app/build/outputs/apk/release/ igm/release/android/ && upload -r app/build/outputs/apk/release/*.apk igm/release/android/com.bytemoe.parkingassistant-latest.apk
       #          secret_id: ${{ secrets.SECRET_ID }}
       #          secret_key: ${{ secrets.SECRET_KEY }}
-      #          bucket: ${{ secrets.BUCKET }}
-      #          region: ap-chongqing
-      - name: Upload artifacts to COS
-        uses: TencentCloud/cos-action@v1
-        with:
-          secret_id: ${{ secrets.SECRET_ID }}
-          secret_key: ${{ secrets.SECRET_KEY }}
-          cos_bucket: ${{ secrets.BUCKET }}
-          cos_region: ap-chongqing
-          local_path: app/build/outputs/apk/release/
-          remote_path: igm/release/android/
-      - name: Upload latest to COS
-        uses: TencentCloud/cos-action@v1
-        with:
-          secret_id: ${{ secrets.SECRET_ID }}
-          secret_key: ${{ secrets.SECRET_KEY }}
-          cos_bucket: ${{ secrets.BUCKET }}
-          cos_region: ap-chongqing
-          local_path: app/build/outputs/apk/release/*.apk
-          remote_path: igm/release/android/com.bytemoe.parkingassistant-latest.apk
+      #          cos_bucket: ${{ secrets.BUCKET }}
+      #          cos_region: ap-chongqing
+      #          local_path: app/build/outputs/apk/release/
+      #          remote_path: igm/release/android/
+      #      - name: Upload latest to COS
+      #        uses: TencentCloud/cos-action@v1
+      #        with:
+      #          secret_id: ${{ secrets.SECRET_ID }}
+      #          secret_key: ${{ secrets.SECRET_KEY }}
+      #          cos_bucket: ${{ secrets.BUCKET }}
+      #          cos_region: ap-chongqing
+      #          local_path: app/build/outputs/apk/release/*.apk
+      #          remote_path: igm/release/android/com.bytemoe.parkingassistant-latest.apk
       - name: Upload artifacts
         uses: actions/upload-artifact@master
         with:
