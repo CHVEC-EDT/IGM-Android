@@ -1,8 +1,12 @@
 package com.bytemoe.parkingassistant;
 
 import android.annotation.SuppressLint;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -72,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 switch (msg.what) {
                     case 0:
                         Toast.makeText(MainActivity.this, (String) msg.obj, Toast.LENGTH_LONG).show();
+                        String[] filename = ((String) msg.obj).split("/");
+                        downLoadUpdate(getApplicationContext(), (String) msg.obj, filename[filename.length - 1]);
                         break;
                 }
             }
@@ -220,6 +226,38 @@ public class MainActivity extends AppCompatActivity {
             bb.order(ByteOrder.BIG_ENDIAN);
             bb.put(body);
             return bb.array();
+        }
+    }
+
+    private void downLoadUpdate(Context context, String url, String filename) {
+        try {
+            Uri uri = Uri.parse(url);
+            //得到系统的下载管理
+            DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+            //得到连接请求对象
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            //指定在什么网络下允许下载
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE);
+            //指定下载文件的保存路径，缓存目录，用手机自带的文件管理器看不到（Android\data\项目包名\files\Download\subPath）
+            request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, filename);
+            request.setTitle("停车助手");
+            request.setDescription("软件更新下载");
+            //MIME_MapTable是所有文件的后缀名所对应的MIME类型的一个String数组  比如{".apk",    "application/vnd.android.package-archive"},
+            request.setMimeType("application/vnd.android.package-archive");
+            // 下载完成后该Notification才会被显示
+            // Android 3.0版本 以后才有该方法
+            //在下载过程中通知栏会一直显示该下载的Notification，在下载完成后该Notification会继续显示，直到用户点击该Notification或者消除该Notification
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            //启动下载,该方法返回系统为当前下载请求分配的一个唯一的ID
+            assert manager != null;
+            long downLoadId = manager.enqueue(request);
+        } catch (Exception e) {
+            Uri uri = Uri.parse(url);
+            //String android.intent.action.VIEW 比较通用，会根据用户的数据类型打开相应的Activity。如:浏览器,电话,播放器,地图
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
     }
 
