@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -13,7 +14,9 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -54,6 +57,20 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_main);
+
+        MaterialToolbar topAppbar = findViewById(R.id.topAppBar);
+        topAppbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.about:
+                        Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return false;
+            }
+        });
 
         SLog.setIsDebug(false);
         OkSocketOptions.setIsDebug(false);
@@ -108,19 +125,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
                 super.onSocketConnectionSuccess(info, action);
-                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, "连接服务器成功");
+                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, getApplicationContext().getResources().getString(R.string.tip_connect_successful));
             }
 
             @Override
             public void onSocketDisconnection(ConnectionInfo info, String action, final Exception e) {
                 super.onSocketDisconnection(info, action, e);
-                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, "与服务器失去连接", e);
+                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, getApplicationContext().getResources().getString(R.string.tip_connection_abort), e);
             }
 
             @Override
             public void onSocketConnectionFailed(ConnectionInfo info, String action, final Exception e) {
                 super.onSocketConnectionFailed(info, action, e);
-                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, "连接服务器失败", e);
+                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, getApplicationContext().getResources().getString(R.string.tip_connect_failed), e);
             }
 
             @Override

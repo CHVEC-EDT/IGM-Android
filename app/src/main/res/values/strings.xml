@@ -2,4 +2,12 @@
     <string name="app_name">Parking Assistant</string>
     <string name="detail_remaining">Remaining</string>
     <string name="detail_space_total">Total</string>
+    <string name="tip_connect_failed">Failed to connect to server</string>
+    <string name="tip_connection_abort">Connection abort</string>
+    <string name="tip_connect_successful">Server connected</string>
+    <string name="appbar_menu_about">About</string>
+    <string name="copyright">Copyright © CEDT</string>
+    <string name="github">GitHub</string>
+    <string name="documents">Documents</string>
+    <string name="back">Back</string>
 </resources>

@@ -3,4 +3,12 @@
     <string name="app_name">停车助手</string>
     <string name="detail_remaining">剩余</string>
     <string name="detail_space_total">总车位</string>
+    <string name="tip_connect_failed">无法连接到服务器</string>
+    <string name="tip_connection_abort">与服务器失去连接</string>
+    <string name="tip_connect_successful">连接服务器成功</string>
+    <string name="appbar_menu_about">关于</string>
+    <string name="copyright">Copyright © CEDT</string>
+    <string name="github">GitHub</string>
+    <string name="documents">项目文档</string>
+    <string name="back">返回</string>
 </resources>
