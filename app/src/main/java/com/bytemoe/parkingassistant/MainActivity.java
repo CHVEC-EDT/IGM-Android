@@ -65,17 +65,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
-                switch (msg.what) {
-                    case 0:
-                        String[] filename = ((String) msg.obj).split("/");
-                        new MaterialAlertDialogBuilder(MainActivity.this)
-                                .setTitle("软件更新")
-                                .setMessage("软件有新的版本，请在通知栏查看下载进度")
-//                                .setNegativeButton("确定", null)
-                                .setCancelable(false)
-                                .show();
-                        new DownloadUtils(MainActivity.this, (String) msg.obj, filename[filename.length - 1]);
-                        break;
+                if (msg.what == 0) {
+                    String[] filename = ((String) msg.obj).split("/");
+                    new MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle("软件更新")
+                            .setMessage("软件有新的版本，请在通知栏查看下载进度")
+                            .setCancelable(false)
+                            .show();
+                    new DownloadUtils(MainActivity.this, (String) msg.obj, filename[filename.length - 1]);
                 }
             }
         };

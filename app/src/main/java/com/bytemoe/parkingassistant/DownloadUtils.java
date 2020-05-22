@@ -33,7 +33,7 @@ class DownloadUtils {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setAllowedOverRoaming(false);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setTitle("停车助手更新");
+        request.setTitle("停车助手");
         request.setDescription("新版停车助手下载中...");
         request.setVisibleInDownloadsUi(true);
 
