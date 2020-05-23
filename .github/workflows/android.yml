@@ -18,15 +18,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Build with Gradle
-        run: |
-          ./gradlew clean
-          ./gradlew assembleRelease
-  publish:
-
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
+        run: ./gradlew assembleRelease
       - name: Upload artifacts
         uses: actions/upload-artifact@master
         with:
@@ -39,4 +31,3 @@ jobs:
           secret_key: ${{ secrets.SECRET_KEY }}
           bucket: ${{ secrets.BUCKET }}
           region: ap-chongqing
-
