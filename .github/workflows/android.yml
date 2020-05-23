@@ -21,6 +21,16 @@ jobs:
         run: |
           ./gradlew clean
           ./gradlew assembleRelease
+  publish:
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Upload artifacts
+        uses: actions/upload-artifact@master
+        with:
+          path: app/build/outputs/apk/release/*.apk
       - name: Upload to COS
         uses: zkqiang/tencent-cos-action@v0.1.0
         with:
@@ -29,7 +39,4 @@ jobs:
           secret_key: ${{ secrets.SECRET_KEY }}
           bucket: ${{ secrets.BUCKET }}
           region: ap-chongqing
-      - name: Upload artifacts
-        uses: actions/upload-artifact@master
-        with:
-          path: app/build/outputs/apk/release/*.apk
+
