@@ -16,7 +16,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_about);
 
         TextView tv_version = findViewById(R.id.tv_version);
-        tv_version.setText(Utils.getCurrentAppVersion(getApplicationContext()));
+        tv_version.setText(Utils.getCurrentAppVersion(getApplicationContext()) + "\n偷偷水一个Commit");
 
         findViewById(R.id.btn_docs).setOnClickListener(this);
         findViewById(R.id.btn_github).setOnClickListener(this);
