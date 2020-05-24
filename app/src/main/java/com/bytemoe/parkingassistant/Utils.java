@@ -66,12 +66,13 @@ class Utils {
      */
     static String checkUpdate(Context context) throws IOException {
         Moshi moshi = new Moshi.Builder().build();
-        String cosBase = "https://cedt-1253315888.file.myqcloud.com/igm/release/android/";
+//        String cosBase = "https://cedt-1253315888.file.myqcloud.com/igm/release/android/";
+        String cosBase = "https://cedt-ussv-1253315888.file.myqcloud.com/igm/release/android/";
 
         int currentBuild = Integer.parseInt(Objects.requireNonNull(getCurrentAppVersion(context)).split("-")[1]);
         int latestBuild;
 
-        Response response = httpGet("https://cedt-1253315888.file.myqcloud.com/igm/release/android/output.json");
+        Response response = httpGet(cosBase + "output.json");
         JsonAdapter<VersionCheckBean> versionCheckBeanJsonAdapter = moshi.adapter(VersionCheckBean.class);
         String responseStr = Objects.requireNonNull(response.body()).string();
         responseStr = responseStr.substring(0, responseStr.length() - 1);
