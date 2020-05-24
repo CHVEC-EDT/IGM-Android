@@ -41,14 +41,15 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class MainActivity extends AppCompatActivity {
 
     private Handler handler;
-    private Moshi moshi = new Moshi.Builder().build();
-    private JsonAdapter<GarageBean> garageBeanJsonAdapter = moshi.adapter(GarageBean.class);
+    private final Moshi moshi = new Moshi.Builder().build();
+    private final JsonAdapter<GarageBean> garageBeanJsonAdapter = moshi.adapter(GarageBean.class);
 
-    public String HOST = "igm-io.cedt.bytemoe.com";
-    public int PORT = 32323;
+    private final String HOST = "igm-io.cedt.bytemoe.com";
+    private final int PORT = 32323;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -62,11 +63,9 @@ public class MainActivity extends AppCompatActivity {
         topAppbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.about:
-                        Intent intent = new Intent(MainActivity.this, AboutActivity.class);
-                        startActivity(intent);
-                        break;
+                if (item.getItemId() == R.id.about) {
+                    Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                    startActivity(intent);
                 }
                 return false;
             }
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
                 super.onSocketConnectionSuccess(info, action);
-                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, getApplicationContext().getResources().getString(R.string.tip_connect_successful));
+                Utils.showSnackbar(findViewById(R.id.mainLayout), getApplicationContext().getResources().getString(R.string.tip_connect_successful));
             }
 
             @Override
@@ -192,18 +191,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         DataManager.getInstance().getGarageList().clear();
     }
 
 
-    public static class m2sPKG implements ISendable {
+    static class m2sPKG implements ISendable {
         private String message = "";
 
         m2sPKG() {
@@ -232,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class RecvTask extends TimerTask {
-        private IConnectionManager connectionManager;
+        private final IConnectionManager connectionManager;
 
         RecvTask(IConnectionManager connectionManager) {
             this.connectionManager = connectionManager;

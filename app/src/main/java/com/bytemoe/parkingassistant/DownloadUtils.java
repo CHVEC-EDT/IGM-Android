@@ -18,9 +18,9 @@ import java.io.IOException;
 
 class DownloadUtils {
     private DownloadManager downloadManager;
-    private Context mContext;
+    private final Context mContext;
     private long downloadId;
-    private String name;
+    private final String name;
     private String pathstr;
 
     DownloadUtils(Context context, String url, String name) {
@@ -29,6 +29,7 @@ class DownloadUtils {
         this.name = name;
     }
 
+    @SuppressWarnings("deprecation")
     private void downloadAPK(String url, String name) {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setAllowedOverRoaming(false);
@@ -50,7 +51,7 @@ class DownloadUtils {
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             checkStatus();
@@ -65,9 +66,7 @@ class DownloadUtils {
             int status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
             switch (status) {
                 case DownloadManager.STATUS_PAUSED:
-                    break;
                 case DownloadManager.STATUS_PENDING:
-                    break;
                 case DownloadManager.STATUS_RUNNING:
                     break;
                 case DownloadManager.STATUS_SUCCESSFUL:

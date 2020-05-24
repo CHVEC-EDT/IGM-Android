@@ -13,10 +13,11 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-public class GarageAdapter extends ArrayAdapter<Garage> {
+class GarageAdapter extends ArrayAdapter<Garage> {
 
-    private int resourceId;
+    private final int resourceId;
 
+    @SuppressWarnings("SameParameterValue")
     GarageAdapter(@NonNull Context context, int resource, @NonNull List<Garage> objects) {
         super(context, resource, objects);
         resourceId = resource;

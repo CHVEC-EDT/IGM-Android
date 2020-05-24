@@ -1,6 +1,7 @@
 package com.bytemoe.parkingassistant;
 
-public class VersionCheckBean {
+@SuppressWarnings("unused")
+class VersionCheckBean {
     ApkData apkData;
 
     static class ApkData {

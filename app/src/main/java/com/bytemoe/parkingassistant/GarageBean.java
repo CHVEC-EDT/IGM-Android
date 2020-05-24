@@ -2,7 +2,8 @@ package com.bytemoe.parkingassistant;
 
 import java.util.List;
 
-public class GarageBean {
+@SuppressWarnings("unused")
+class GarageBean {
     public String type;
     Data data;
 

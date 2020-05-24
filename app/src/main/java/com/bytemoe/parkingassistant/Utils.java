@@ -19,7 +19,7 @@ import okhttp3.Response;
 
 class Utils {
 
-    static void showSnackbar(View view, final Context context, String title) {
+    static void showSnackbar(View view, String title) {
         Snackbar.make(view, title, Snackbar.LENGTH_LONG)
                 .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
                 .show();
@@ -62,11 +62,10 @@ class Utils {
      *
      * @param context 上下文
      * @return 有更新版本则返回安装包下载地址，否则返回null
-     * @throws IOException
+     * @throws IOException balabala...
      */
     static String checkUpdate(Context context) throws IOException {
         Moshi moshi = new Moshi.Builder().build();
-//        String cosBase = "https://cedt-1253315888.file.myqcloud.com/igm/release/android/";
         String cosBase = "https://cedt-ussv-1253315888.file.myqcloud.com/igm/release/android/";
 
         int currentBuild = Integer.parseInt(Objects.requireNonNull(getCurrentAppVersion(context)).split("-")[1]);
@@ -83,7 +82,7 @@ class Utils {
         return latestBuild > currentBuild ? cosBase + versionCheckData.apkData.outputFile : null;
     }
 
-    static Response httpGet(String url) {
+    private static Response httpGet(String url) {
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
         Response result = null;
         Request request = new Request.Builder()

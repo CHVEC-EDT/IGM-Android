@@ -1,11 +1,11 @@
 package com.bytemoe.parkingassistant;
 
 class Garage {
-    private String name;
-    private int distance;
-    private int total;
-    private int remaining;
-    private String[] remainingList;
+    private final String name;
+    private final int distance;
+    private final int total;
+    private final int remaining;
+    private final String[] remainingList;
 
     Garage(String name, int distance, int total, int remaining, String[] remainingList) {
         this.name = name;

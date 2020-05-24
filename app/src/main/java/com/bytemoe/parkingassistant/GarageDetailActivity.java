@@ -20,7 +20,7 @@ public class GarageDetailActivity extends AppCompatActivity {
 
     private int position;
     private ArrayAdapter<String> arrayAdapter;
-    private List<String> remainingList = new ArrayList<>();
+    private final List<String> remainingList = new ArrayList<>();
 
     private TextView tv_remaining, tv_total;
     private MaterialToolbar toolbar;

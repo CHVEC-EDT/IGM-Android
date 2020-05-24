@@ -8,8 +8,8 @@ public class DataManager {
 
     private static volatile DataManager INSTANCE;
 
-    private List<Garage> garageList = new ArrayList<>();
-    private HashMap<String, Object> store = new HashMap<>();
+    private final List<Garage> garageList = new ArrayList<>();
+    private final HashMap<String, Object> store = new HashMap<>();
 
     private DataManager() {
     }
