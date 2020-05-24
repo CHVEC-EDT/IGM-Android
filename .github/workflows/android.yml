@@ -39,4 +39,5 @@ jobs:
           secret_id: ${{ secrets.SECRET_ID }}
           secret_key: ${{ secrets.SECRET_KEY }}
           bucket: ${{ secrets.BUCKET }}
-          region: ap-chongqing
+          region: na-siliconvalley
+#          region: ap-chongqing
