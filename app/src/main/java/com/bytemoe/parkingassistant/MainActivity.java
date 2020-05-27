@@ -119,24 +119,25 @@ public class MainActivity extends AppCompatActivity {
                 return Utils.byteArrayToInt(header);
             }
         });
+
         connectionManager.option(builder.build());
         connectionManager.registerReceiver(new SocketActionAdapter() {
             @Override
             public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
                 super.onSocketConnectionSuccess(info, action);
-                Utils.showSnackbar(findViewById(R.id.mainLayout), getApplicationContext().getResources().getString(R.string.tip_connect_successful));
+                Utils.showSnackbar(findViewById(R.id.mainLayout), getString(R.string.tip_connect_successful));
             }
 
             @Override
             public void onSocketDisconnection(ConnectionInfo info, String action, final Exception e) {
                 super.onSocketDisconnection(info, action, e);
-                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, getApplicationContext().getResources().getString(R.string.tip_connection_abort), e);
+                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, getString(R.string.tip_connection_abort), e);
             }
 
             @Override
             public void onSocketConnectionFailed(ConnectionInfo info, String action, final Exception e) {
                 super.onSocketConnectionFailed(info, action, e);
-                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, getApplicationContext().getResources().getString(R.string.tip_connect_failed), e);
+                Utils.showSnackbar(findViewById(R.id.mainLayout), MainActivity.this, getString(R.string.tip_connect_failed), e);
             }
 
             @Override
