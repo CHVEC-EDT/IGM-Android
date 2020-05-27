@@ -64,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.about) {
-                    Intent intent = new Intent(MainActivity.this, AboutActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 }
                 return false;
             }
