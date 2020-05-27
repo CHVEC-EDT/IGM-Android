@@ -10,4 +10,6 @@
     <string name="github">GitHub</string>
     <string name="documents">Documents</string>
     <string name="back">Back</string>
+    <string name="about_tip_new_version">New version available(%s) restart to update.</string>
+    <string name="about_btn_update_now">Update Now</string>
 </resources>

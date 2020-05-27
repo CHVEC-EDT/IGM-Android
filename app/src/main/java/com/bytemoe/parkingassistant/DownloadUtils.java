@@ -29,7 +29,6 @@ class DownloadUtils {
         this.name = name;
     }
 
-    @SuppressWarnings("deprecation")
     private void downloadAPK(String url, String name) {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setAllowedOverRoaming(false);

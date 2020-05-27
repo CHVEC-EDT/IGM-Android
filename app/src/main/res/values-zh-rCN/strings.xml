@@ -11,4 +11,6 @@
     <string name="github">GitHub</string>
     <string name="documents">项目文档</string>
     <string name="back">返回</string>
+    <string name="about_tip_new_version">有新版本(%s)，重启APP进行更新</string>
+    <string name="about_btn_update_now">立即更新</string>
 </resources>

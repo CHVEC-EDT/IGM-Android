@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     new MaterialAlertDialogBuilder(MainActivity.this)
                             .setTitle("软件更新中")
                             .setMessage("正在下载新的版本，请在通知栏查看下载进度")
-                            .setCancelable(false)
+                            .setCancelable(true)
                             .show();
                     new DownloadUtils(MainActivity.this, (String) msg.obj, filename[filename.length - 1]);
                 }
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 Message msg = new Message();
                 msg.what = 0;
                 try {
-                    String apkUrl = Utils.checkUpdate(getApplicationContext());
+                    String apkUrl = Objects.requireNonNull(Utils.checkUpdate(getApplicationContext())).getDownloadUrl();
                     msg.obj = apkUrl;
                     if (apkUrl != null) handler.sendMessage(msg);
                 } catch (Exception e) {

@@ -1,6 +1,8 @@
 package com.bytemoe.parkingassistant;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.view.View;
@@ -64,7 +66,7 @@ class Utils {
      * @return 有更新版本则返回安装包下载地址，否则返回null
      * @throws IOException balabala...
      */
-    static String checkUpdate(Context context) throws IOException {
+    static AppVersion checkUpdate(Context context) throws IOException {
         Moshi moshi = new Moshi.Builder().build();
         String cosBase = "https://cedt-ussv-1253315888.file.myqcloud.com/igm/release/android/";
 
@@ -78,8 +80,11 @@ class Utils {
         responseStr = responseStr.replaceFirst("\\[", "");
         VersionCheckBean versionCheckData = versionCheckBeanJsonAdapter.fromJson(responseStr);
         assert versionCheckData != null;
+        if (isDebuggable(context)) {
+            return new AppVersion(versionCheckData.apkData.versionCode, versionCheckData.apkData.versionName, cosBase + versionCheckData.apkData.outputFile);
+        }
         latestBuild = Integer.parseInt(Objects.requireNonNull(versionCheckData.apkData.versionName.split("-")[1]));
-        return latestBuild > currentBuild ? cosBase + versionCheckData.apkData.outputFile : null;
+        return latestBuild > currentBuild ? new AppVersion(versionCheckData.apkData.versionCode, versionCheckData.apkData.versionName, cosBase + versionCheckData.apkData.outputFile) : null;
     }
 
     private static Response httpGet(String url) {
@@ -100,6 +105,27 @@ class Utils {
             result = response;
         }
         return result;
+    }
+
+
+    public static boolean isDebuggable(Context context) {
+        boolean debuggable = false;
+        PackageManager pm = context.getPackageManager();
+        try {
+            ApplicationInfo appinfo = pm.getApplicationInfo(context.getPackageName(), 0);
+            debuggable = (0 != (appinfo.flags & ApplicationInfo.FLAG_DEBUGGABLE));
+        } catch (PackageManager.NameNotFoundException e) {
+            /*debuggable variable will remain false*/
+        }
+        return debuggable;
+    }
+
+    public static void restartApplication(Context context) {
+        final Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        assert intent != null;
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     static int byteArrayToInt(byte[] byteArray) {
