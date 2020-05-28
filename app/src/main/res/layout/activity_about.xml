@@ -14,7 +14,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/igm_logo_full" />
+        app:srcCompat="@drawable/igm_logo_full"
+        android:contentDescription="@string/app_name" />
 
     <TextView
         android:id="@+id/tv_appname"

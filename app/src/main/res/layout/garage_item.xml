@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:baselineAligned="false">
 
 
     <LinearLayout
@@ -25,7 +26,7 @@
                 android:layout_gravity="top"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="Unknown Garage"
+                android:text="@string/na"
                 android:textColor="#262626"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -42,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="距离：N/A KM"
+                android:text="@string/item_distance"
                 android:textColor="#AAAAAA" />
         </LinearLayout>
     </LinearLayout>
@@ -65,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="N/A"
+                android:text="@string/item_remaining"
                 android:textColor="#0C75EB"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -86,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="/ N/A 车位"
+                android:text="@string/item_total"
                 android:textColor="#0C75EB"
                 android:textStyle="bold"
                 tools:ignore="RtlCompat" />

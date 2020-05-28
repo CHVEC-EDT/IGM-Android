@@ -60,9 +60,9 @@ class GarageAdapter extends ArrayAdapter<Garage> {
         }
         assert garage != null;
         viewHolder.tv_name.setText(garage.getName());
-        viewHolder.tv_distance.setText("距你 " + garage.getDistance() + " KM");
-        viewHolder.tv_space_total.setText("/ " + garage.getTotal() + " 车位");
-        viewHolder.tv_space_remaining.setText(garage.getRemaining() + "");
+        viewHolder.tv_distance.setText(getContext().getString(R.string.item_distance, String.valueOf(garage.getDistance())));
+        viewHolder.tv_space_remaining.setText(getContext().getString(R.string.item_remaining, String.valueOf(garage.getRemaining())));
+        viewHolder.tv_space_total.setText(getContext().getString(R.string.item_total, String.valueOf(garage.getTotal())));
         return view;
     }
 
