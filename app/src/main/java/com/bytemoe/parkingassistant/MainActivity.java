@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         Timer timer = (Timer) Objects.requireNonNull(DataManager.getInstance().getStore().get("recvTimer"));
         DataManager.getInstance().getStore().putIfAbsent("recvTimerRunning", false);
         if (!(boolean) DataManager.getInstance().getStore().get("recvTimerRunning")) {
-            timer.schedule(new RecvTask(connectionManager), 0, 5000);
+            timer.schedule(new RecvTask(connectionManager), 0, 1000);
             DataManager.getInstance().getStore().put("recvTimerRunning", true);
         }
     }
