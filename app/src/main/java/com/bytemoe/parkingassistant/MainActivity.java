@@ -126,6 +126,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
                 super.onSocketConnectionSuccess(info, action);
+                /* Timer */
+                DataManager.getInstance().getStore().putIfAbsent("recvTimer", new Timer());
+                Timer timer = (Timer) Objects.requireNonNull(DataManager.getInstance().getStore().get("recvTimer"));
+                DataManager.getInstance().getStore().putIfAbsent("recvTimerRunning", false);
+                if (!(boolean) DataManager.getInstance().getStore().get("recvTimerRunning")) {
+                    timer.schedule(new RecvTask(connectionManager), 0, 1000);
+                    DataManager.getInstance().getStore().put("recvTimerRunning", true);
+                }
+                /* .Timer */
                 Utils.showSnackbar(findViewById(R.id.mainLayout), getString(R.string.tip_connect_successful));
             }
 
@@ -182,14 +191,6 @@ public class MainActivity extends AppCompatActivity {
         });
         listView.setAdapter(garageAdapter);
         DataManager.getInstance().getStore().put("garageAdapter", garageAdapter);
-
-        DataManager.getInstance().getStore().putIfAbsent("recvTimer", new Timer());
-        Timer timer = (Timer) Objects.requireNonNull(DataManager.getInstance().getStore().get("recvTimer"));
-        DataManager.getInstance().getStore().putIfAbsent("recvTimerRunning", false);
-        if (!(boolean) DataManager.getInstance().getStore().get("recvTimerRunning")) {
-            timer.schedule(new RecvTask(connectionManager), 0, 1000);
-            DataManager.getInstance().getStore().put("recvTimerRunning", true);
-        }
     }
 
     @Override
