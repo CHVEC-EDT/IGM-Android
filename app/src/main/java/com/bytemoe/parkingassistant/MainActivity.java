@@ -70,8 +70,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SLog.setIsDebug(false);
-        OkSocketOptions.setIsDebug(false);
+        boolean isDebuggable = Utils.isDebuggable(getApplicationContext());
+
+        SLog.setIsDebug(isDebuggable);
+        OkSocketOptions.setIsDebug(isDebuggable);
 
         ConnectionInfo connectionInfo = new ConnectionInfo(HOST, PORT);
         final IConnectionManager connectionManager = OkSocket.open(connectionInfo);
