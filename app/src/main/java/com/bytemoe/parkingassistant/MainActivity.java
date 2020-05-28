@@ -75,9 +75,6 @@ public class MainActivity extends AppCompatActivity {
         SLog.setIsDebug(isDebuggable);
         OkSocketOptions.setIsDebug(isDebuggable);
 
-        ConnectionInfo connectionInfo = new ConnectionInfo(HOST, PORT);
-        final IConnectionManager connectionManager = OkSocket.open(connectionInfo);
-        OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
         handler = new Handler() {
             @Override
             public void handleMessage(@NonNull Message msg) {
@@ -108,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
+
+        ConnectionInfo connectionInfo = new ConnectionInfo(HOST, PORT);
+        final IConnectionManager connectionManager = OkSocket.open(connectionInfo);
+        OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
 
         builder.setReaderProtocol(new IReaderProtocol() {
             @Override
