@@ -26,8 +26,8 @@ jobs:
       - name: Upload to COS
         uses: zkqiang/tencent-cos-action@v0.1.0
         with:
-#          args: upload -r app/build/outputs/apk/release/ igm/release/android/ && upload -r app/build/outputs/apk/release/*.apk igm/release/android/com.bytemoe.parkingassistant-latest.apk
-          args: upload -r app/build/outputs/apk/release/output.json igm/release/android/latest.json && upload -r app/build/outputs/apk/release/*.apk igm/release/android/com.bytemoe.parkingassistant-latest.apk
+          #          args: upload -r app/build/outputs/apk/release/ igm/release/android/ && upload -r app/build/outputs/apk/release/*.apk igm/release/android/com.bytemoe.parkingassistant-latest.apk
+          args: upload -r app/build/outputs/apk/release/*.apk igm/release/android/ && upload -r app/build/outputs/apk/release/output.json igm/release/android/latest.json && upload -r app/build/outputs/apk/release/*.apk igm/release/android/com.bytemoe.parkingassistant-latest.apk
           secret_id: ${{ secrets.SECRET_ID }}
           secret_key: ${{ secrets.SECRET_KEY }}
           bucket: ${{ secrets.BUCKET }}

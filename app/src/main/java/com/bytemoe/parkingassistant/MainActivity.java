@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
                             .setMessage("正在下载新的版本，请在通知栏查看下载进度")
                             .setCancelable(true)
                             .show();
+                    Log.e("DL", (String) msg.obj);
+                    Log.e("DL", filename[filename.length - 1]);
                     new DownloadUtils(MainActivity.this, (String) msg.obj, filename[filename.length - 1]);
                 }
             }

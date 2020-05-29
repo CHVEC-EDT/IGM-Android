@@ -84,7 +84,7 @@ class Utils {
         String responseStr = Objects.requireNonNull(response.body()).string();
         VersionCheckNewBean versionCheckNewData = versionCheckNewBeanJsonAdapter.fromJson(responseStr);
         assert versionCheckNewData != null;
-        AppVersion appVersion = new AppVersion(versionCheckNewData.elements.get(0).versionCode, versionCheckNewData.elements.get(0).versionName, cosBase + versionCheckNewData.elements.get(0).outputFile);
+        AppVersion appVersion = new AppVersion(versionCheckNewData.elements.get(0).versionCode, "build#" + versionCheckNewData.elements.get(0).versionName, cosBase + versionCheckNewData.elements.get(0).outputFile);
         if (isDebuggable(context)) {
             return appVersion;
         }
