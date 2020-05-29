@@ -72,19 +72,25 @@ class Utils {
 
         int currentBuild = Integer.parseInt(Objects.requireNonNull(getCurrentAppVersion(context)).split("-")[1]);
         int latestBuild;
-
-        Response response = httpGet(cosBase + "output.json");
-        JsonAdapter<VersionCheckBean> versionCheckBeanJsonAdapter = moshi.adapter(VersionCheckBean.class);
+//        Response response = httpGet(cosBase + "output.json");
+//        JsonAdapter<VersionCheckBean> versionCheckBeanJsonAdapter = moshi.adapter(VersionCheckBean.class);
+//        String responseStr = Objects.requireNonNull(response.body()).string();
+//        responseStr = responseStr.substring(0, responseStr.length() - 1);
+//        responseStr = responseStr.replaceFirst("\\[", "");
+//        VersionCheckBean versionCheckData = versionCheckBeanJsonAdapter.fromJson(responseStr);
+//        assert versionCheckData != null;
+        Response response = httpGet(cosBase + "latest.json");
+        JsonAdapter<VersionCheckNewBean> versionCheckNewBeanJsonAdapter = moshi.adapter(VersionCheckNewBean.class);
         String responseStr = Objects.requireNonNull(response.body()).string();
-        responseStr = responseStr.substring(0, responseStr.length() - 1);
-        responseStr = responseStr.replaceFirst("\\[", "");
-        VersionCheckBean versionCheckData = versionCheckBeanJsonAdapter.fromJson(responseStr);
-        assert versionCheckData != null;
+        VersionCheckNewBean versionCheckNewData = versionCheckNewBeanJsonAdapter.fromJson(responseStr);
+        assert versionCheckNewData != null;
+        AppVersion appVersion = new AppVersion(versionCheckNewData.elements.get(0).versionCode, versionCheckNewData.elements.get(0).versionName, cosBase + versionCheckNewData.elements.get(0).outputFile);
         if (isDebuggable(context)) {
-            return new AppVersion(versionCheckData.apkData.versionCode, versionCheckData.apkData.versionName, cosBase + versionCheckData.apkData.outputFile);
+            return appVersion;
         }
-        latestBuild = Integer.parseInt(Objects.requireNonNull(versionCheckData.apkData.versionName.split("-")[1]));
-        return latestBuild > currentBuild ? new AppVersion(versionCheckData.apkData.versionCode, versionCheckData.apkData.versionName, cosBase + versionCheckData.apkData.outputFile) : null;
+//        latestBuild = Integer.parseInt(Objects.requireNonNull(versionCheckData.apkData.versionName.split("-")[1]));
+        latestBuild = appVersion.getVersionCode();
+        return latestBuild > currentBuild ? appVersion : null;
     }
 
     private static Response httpGet(String url) {
