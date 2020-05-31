@@ -71,25 +71,17 @@ class Utils {
         String cosBase = "https://cedt-ussv-1253315888.file.myqcloud.com/igm/release/android/";
 
         int currentBuild = Integer.parseInt(Objects.requireNonNull(getCurrentAppVersion(context)).split("-")[1]);
-        int latestBuild;
-//        Response response = httpGet(cosBase + "output.json");
-//        JsonAdapter<VersionCheckBean> versionCheckBeanJsonAdapter = moshi.adapter(VersionCheckBean.class);
-//        String responseStr = Objects.requireNonNull(response.body()).string();
-//        responseStr = responseStr.substring(0, responseStr.length() - 1);
-//        responseStr = responseStr.replaceFirst("\\[", "");
-//        VersionCheckBean versionCheckData = versionCheckBeanJsonAdapter.fromJson(responseStr);
-//        assert versionCheckData != null;
         Response response = httpGet(cosBase + "latest.json");
         JsonAdapter<VersionCheckNewBean> versionCheckNewBeanJsonAdapter = moshi.adapter(VersionCheckNewBean.class);
         String responseStr = Objects.requireNonNull(response.body()).string();
         VersionCheckNewBean versionCheckNewData = versionCheckNewBeanJsonAdapter.fromJson(responseStr);
         assert versionCheckNewData != null;
+        response.close();
         AppVersion appVersion = new AppVersion(versionCheckNewData.elements.get(0).versionCode, "build#" + versionCheckNewData.elements.get(0).versionName, cosBase + versionCheckNewData.elements.get(0).outputFile);
         if (isDebuggable(context)) {
             return appVersion;
         }
-//        latestBuild = Integer.parseInt(Objects.requireNonNull(versionCheckData.apkData.versionName.split("-")[1]));
-        latestBuild = appVersion.getVersionCode();
+        int latestBuild = appVersion.getVersionCode();
         return latestBuild > currentBuild ? appVersion : null;
     }
 
@@ -120,8 +112,8 @@ class Utils {
         try {
             ApplicationInfo appinfo = pm.getApplicationInfo(context.getPackageName(), 0);
             debuggable = (0 != (appinfo.flags & ApplicationInfo.FLAG_DEBUGGABLE));
-        } catch (PackageManager.NameNotFoundException e) {
-            /*debuggable variable will remain false*/
+        } catch (PackageManager.NameNotFoundException ignored) {
+            /* ignored */
         }
         return debuggable;
     }

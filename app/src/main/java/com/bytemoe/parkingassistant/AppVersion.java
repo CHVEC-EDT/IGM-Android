@@ -1,9 +1,9 @@
 package com.bytemoe.parkingassistant;
 
 class AppVersion {
-    private int versionCode;
-    private String versionName;
-    private String downloadUrl;
+    private final int versionCode;
+    private final String versionName;
+    private final String downloadUrl;
 
     AppVersion(int versionCode, String versionName, String downloadUrl) {
         this.versionCode = versionCode;

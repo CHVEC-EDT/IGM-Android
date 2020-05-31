@@ -2,10 +2,10 @@ package com.bytemoe.parkingassistant;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private final String HOST = "igm-io.cedt.bytemoe.com";
     private final int PORT = 32323;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
                             .setMessage("正在下载新的版本，请在通知栏查看下载进度")
                             .setCancelable(true)
                             .show();
-                    Log.e("DL", (String) msg.obj);
-                    Log.e("DL", filename[filename.length - 1]);
                     new DownloadUtils(MainActivity.this, (String) msg.obj, filename[filename.length - 1]);
                 }
             }

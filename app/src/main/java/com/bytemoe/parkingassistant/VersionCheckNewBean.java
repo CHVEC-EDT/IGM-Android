@@ -2,6 +2,7 @@ package com.bytemoe.parkingassistant;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 class VersionCheckNewBean {
     int version;
     String applicationId;
